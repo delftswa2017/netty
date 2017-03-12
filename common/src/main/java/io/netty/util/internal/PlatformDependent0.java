@@ -167,6 +167,16 @@ final class PlatformDependent0 {
                     unsafe = null;
                 }
             }
+
+            if (unsafe != null) {
+                // There are assumptions made where ever BYTE_ARRAY_BASE_OFFSET is used (equals, hashCodeAscii, and
+                // primitive accessors) that arrayIndexScale == 1, and results are undefined if this is not the case.
+                long byteArrayIndexScale = unsafe.arrayIndexScale(byte[].class);
+                if (byteArrayIndexScale != 1) {
+                    logger.debug("unsafe.arrayIndexScale is {} (expected: 1). Not using unsafe.", byteArrayIndexScale);
+                    unsafe = null;
+                }
+            }
         }
         UNSAFE = unsafe;
 
@@ -337,10 +347,6 @@ final class PlatformDependent0 {
 
     static Object getObject(Object object, long fieldOffset) {
         return UNSAFE.getObject(object, fieldOffset);
-    }
-
-    static Object getObjectVolatile(Object object, long fieldOffset) {
-        return UNSAFE.getObjectVolatile(object, fieldOffset);
     }
 
     static int getInt(Object object, long fieldOffset) {
