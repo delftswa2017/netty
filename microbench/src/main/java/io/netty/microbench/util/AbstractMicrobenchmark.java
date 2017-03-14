@@ -33,15 +33,11 @@ public class AbstractMicrobenchmark extends AbstractMicrobenchmarkBase {
 
     protected static final int DEFAULT_FORKS = 2;
 
-    private final InternalLogger logger = InternalLoggerFactory.getInstance(getClass());
-
     public static final class HarnessExecutor extends ThreadPoolExecutor {
         public HarnessExecutor(int maxThreads, String prefix) {
             super(maxThreads, maxThreads, 0, TimeUnit.MILLISECONDS,
                     new LinkedBlockingQueue<Runnable>(), new DefaultThreadFactory(prefix));
-            if (logger.isDebugEnabled()) {
-                logger.debug("Using harness executor");
-            }
+            System.out.println("Using harness executor");
         }
     }
 
